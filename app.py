@@ -1,9 +1,12 @@
 from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS
 import pickle
 import joblib, numpy as np, os
 
 app = Flask(__name__, static_folder="static")
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+CORS(app)
 
 resp_model = joblib.load(os.path.join(BASE_DIR, "disease_model.pkl"))
 heat_model = pickle.load(open("heat_model.pkl", "rb"))
