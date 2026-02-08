@@ -9,8 +9,9 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CORS(app)
 
 resp_model = joblib.load(os.path.join(BASE_DIR, "disease_model.pkl"))
-heat_model = pickle.load(open("heat_model.pkl", "rb"))
-heat_scaler = pickle.load(open("heat_scaler.pkl", "rb"))
+heat_model = pickle.load(open(os.path.join(BASE_DIR, "heat_model.pkl"), "rb"))
+heat_scaler = pickle.load(open(os.path.join(BASE_DIR, "heat_scaler.pkl"), "rb"))
+
 
 RESP_MAP = {
  0:"หวัด",1:"ไข้หวัดใหญ่",2:"ปอดอักเสบ",3:"หลอดลมอักเสบ",
