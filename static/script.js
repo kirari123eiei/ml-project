@@ -48,22 +48,23 @@ async function analyzeResp() {
     });
 
     if (!res.ok) {
-      throw new Error("Server error");
+      const text = await res.text();
+      throw new Error(text);
     }
 
     const result = await res.json();
-    console.log(result);
 
     document.getElementById("respResult").innerText =
       result.possible_diseases
-        .map(d => `• ${d.name} : ${d.probability}%`)
+        .map(r => `• ${r.name} : ${r.probability}%`)
         .join("\n");
 
   } catch (err) {
-    console.error(err);
+    console.error("API ERROR:", err);
     alert("ระบบขัดข้อง กรุณาลองใหม่");
   }
 }
+
 
 async function analyzeHeat() {
   const d = id => document.getElementById(id);
