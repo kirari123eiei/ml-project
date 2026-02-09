@@ -41,43 +41,63 @@ def analyze_resp():
         d = request.get_json(force=True)
 
         features = np.array([[
-            d.get("cough", 0),
-            d.get("heavycough", 0),
-            d.get("tired", 0),
-            d.get("feverlittle", 0),
-            d.get("feverbig", 0),
-            d.get("sore_throat", 0),
-            d.get("chestpain", 0),
-            d.get("chest", 0),
-            d.get("tightchest", 0),
-            d.get("breath", 0),
-            d.get("breathtired", 0),
-            d.get("breathfast", 0),
-            d.get("wheezing", 0),
-            d.get("runny_nose", 0),
-            d.get("sneeze", 0),
-            d.get("bodyaches", 0),
-            d.get("weight", 0),
-            d.get("panting", 0),
-            d.get("swallow", 0),
-            d.get("phlegm", 0),
-            d.get("headache", 0),
-            d.get("chronic_cough", 0),
-            1 if d.get("aqi", 0) > 100 else 0,
-            d.get("sad", 0),
-            d.get("nausea", 0),
-            d.get("diarrhea", 0),
-            d.get("loss_smell", 0),
-            d.get("red_eyes", 0),
-            d.get("skin_rash", 0),
-            d.get("finger_color", 0),
-            d.get("hoarseness", 0),
-            d.get("barking_cough", 0),
-            d.get("bloody_nose", 0),
-            d.get("jaw_swelling", 0),
-            d.get("earache", 0),
-            d.get("stridor", 0),
-        ]])
+    # 0–2
+    d.get("cough", 0),
+    d.get("heavycough", 0),
+    d.get("tired", 0),
+
+    # 3–5
+    d.get("feverlittle", 0),
+    d.get("feverbig", 0),
+    d.get("sore_throat", 0),
+
+    # 6–8
+    d.get("chestpain", 0),
+    d.get("chest", 0),
+    d.get("tightchest", 0),
+
+    # 9–12
+    d.get("breath", 0),
+    d.get("breathtired", 0),
+    d.get("breathfast", 0),
+    d.get("wheezing", 0),
+
+    # 13–15
+    d.get("runny_nose", 0),
+    d.get("sneeze", 0),
+    d.get("bodyaches", 0),
+
+    # 16–19
+    d.get("weight", 0),
+    d.get("panting", 0),
+    d.get("swallow", 0),
+    d.get("phlegm", 0),
+
+    # 20–21
+    d.get("headache", 0),
+    d.get("chronic_cough", 0),
+
+    # 22 ✅ aqi_bad
+    1 if d.get("aqi", 0) > 100 else 0,
+
+    # 23–29
+    d.get("sad", 0),
+    d.get("nausea", 0),
+    d.get("diarrhea", 0),
+    d.get("loss_smell", 0),
+    d.get("red_eyes", 0),
+    d.get("skin_rash", 0),
+    d.get("finger_color", 0),
+
+    # 30–35 (อาการใหม่)
+    d.get("hoarseness", 0),
+    d.get("barking_cough", 0),
+    d.get("bloody_nose", 0),
+    d.get("jaw_swelling", 0),
+    d.get("earache", 0),
+    d.get("stridor", 0),
+]])
+
 
         proba = resp_model.predict_proba(features)[0]
 
