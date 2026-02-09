@@ -17,7 +17,10 @@ RESP_MAP = {
  0:"หวัด",1:"ไข้หวัดใหญ่",2:"ปอดอักเสบ",3:"หลอดลมอักเสบ",
  4:"หอบหืด",5:"วัณโรค",6:"ทอนซิลอักเสบ",7:"ระคายเคืองจากฝุ่น",
  8:"ไซนัสอักเสบ",9:"COPD",10:"ถุงลมโป่งพอง",
- 11:"หลอดลมโป่งพอง",12:"COVID-19"
+ 11:"หลอดลมโป่งพอง",12:"COVID-19",13:"โรคหัด",14:"อีสุกอีใส",
+ 15:"ไข้ผื่นกุหลาบ",16:"โรคคอตีบ",17:"คางทูม",18:"ครู้ป",19:"หลอดลมฝอยอักเสบ",20:"กล่องเสียงอักเสบ",21:"อีดำอีแดง",22:"เยื่อจมูกอักเสบเป็นหนอง",
+ 23:"เลือดกำเดา",24:"ไอกรน",25: "เยื่อหุ้มปอดอักเสบ",26: "หัดเยอรมัน",27:"ผนังกั้นจมูกคด",28: "สิ่งแปลกปลอมเข้าจมูก",29: "หลอดลมพอง",
+ 30:"หวัดภูมิแพ้",31:"ติ่งเนื้อเมือกในจมูก"
 }
 
 HEAT_MAP = {
@@ -29,37 +32,90 @@ HEAT_MAP = {
 }
 
 @app.route("/")
-def index():
-    return send_from_directory("static","index.html")
+def home():
+    return send_from_directory(app.static_folder, "index.html")
 
 @app.route("/analyze", methods=["POST"])
 def analyze_resp():
-    d = request.get_json()
+    d = request.get_json(force=True, silent=True)
 
-    features = np.array([[ 
-        d.get(k,0) for k in [
-        "cough","chronic_cough","heavycough","tired",
-        "feverlittle","feverbig","sore_throat",
-        "chestpain","chest","tightchest",
-        "breath","breathtired","breathfast","wheezing",
-        "runny_nose","sneeze","bodyaches","weight",
-        "panting","swallow","phlegm","headache"
-        ]
-    ] + [1 if d.get("aqi",0)>100 else 0] + [
-        d.get(k,0) for k in [
-        "sad","nausea","diarrhea","loss_smell","red_eyes",
-        "skin_rash","finger_color"
-        ]
+    if d is None:
+        return jsonify({"error": "Invalid JSON"}), 400
+
+    features = np.array([[
+        # 0–2
+        d.get("cough", 0),
+        d.get("heavycough", 0),
+        d.get("tired", 0),
+
+        # 3–5
+        d.get("feverlittle", 0),
+        d.get("feverbig", 0),
+        d.get("sore_throat", 0),
+
+        # 6–8
+        d.get("chestpain", 0),
+        d.get("chest", 0),
+        d.get("tightchest", 0),
+
+        # 9–12
+        d.get("breath", 0),
+        d.get("breathtired", 0),
+        d.get("breathfast", 0),
+        d.get("wheezing", 0),
+
+        # 13–15
+        d.get("runny_nose", 0),
+        d.get("sneeze", 0),
+        d.get("bodyaches", 0),
+
+        # 16–19
+        d.get("weight", 0),
+        d.get("panting", 0),
+        d.get("swallow", 0),
+        d.get("phlegm", 0),
+
+        # 20–21
+        d.get("headache", 0),
+        d.get("chronic_cough", 0),
+
+        # 22
+        1 if d.get("aqi", 0) > 100 else 0,
+
+        # 23–29
+        d.get("sad", 0),
+        d.get("nausea", 0),
+        d.get("diarrhea", 0),
+        d.get("loss_smell", 0),
+        d.get("red_eyes", 0),
+        d.get("skin_rash", 0),
+        d.get("finger_color", 0),
+
+        # 30–32 (อาการใหม่)
+        d.get("hoarseness", 0),
+        d.get("barking_cough", 0),
+        d.get("bloody_nose", 0),
+        d.get("jaw_swelling", 0),
+        d.get("earache", 0),
+        d.get("stridor", 0),
     ]])
 
     proba = resp_model.predict_proba(features)[0]
-    res = sorted(
-        [{"name":RESP_MAP[int(i)],"probability":round(float(p),2)}
-         for i,p in zip(resp_model.classes_,proba)],
-        key=lambda x:x["probability"], reverse=True
-    )
 
-    return jsonify({"possible_diseases":res[:3]})
+    res = sorted(
+    [
+        {
+            "name": RESP_MAP[int(i)],
+            "probability": round(float(p) * 100, 2)  # %
+        }
+        for i, p in zip(resp_model.classes_, proba)
+    ],
+    key=lambda x: x["probability"],
+    reverse=True
+)
+
+
+    return jsonify({"possible_diseases": res[:3]})
 
 @app.route("/analyze_heat", methods=["POST"])
 def analyze_heat():

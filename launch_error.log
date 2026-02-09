@@ -5932,3 +5932,40 @@ SyntaxError: positional argument follows keyword argument
 [33mPress CTRL+C to quit[0m
 127.0.0.1 - - [05/Feb/2026 15:31:37] "GET / HTTP/1.1" 200 -
 127.0.0.1 - - [05/Feb/2026 15:31:50] "POST /analyze HTTP/1.1" 200 -
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://10.52.141.206:8000
+[33mPress CTRL+C to quit[0m
+127.0.0.1 - - [09/Feb/2026 11:28:17] "[33mGET / HTTP/1.1[0m" 404 -
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://10.52.141.206:8000
+[33mPress CTRL+C to quit[0m
+127.0.0.1 - - [09/Feb/2026 11:36:01] "[33mGET / HTTP/1.1[0m" 404 -
+127.0.0.1 - - [09/Feb/2026 11:36:04] "[33mGET / HTTP/1.1[0m" 404 -
+127.0.0.1 - - [09/Feb/2026 11:36:05] "[33mGET / HTTP/1.1[0m" 404 -
+127.0.0.1 - - [09/Feb/2026 11:36:06] "[33mGET / HTTP/1.1[0m" 404 -
+127.0.0.1 - - [09/Feb/2026 11:36:06] "[33mGET / HTTP/1.1[0m" 404 -
+127.0.0.1 - - [09/Feb/2026 11:36:07] "[33mGET / HTTP/1.1[0m" 404 -
+127.0.0.1 - - [09/Feb/2026 11:36:07] "[33mGET / HTTP/1.1[0m" 404 -
+127.0.0.1 - - [09/Feb/2026 11:36:08] "[33mGET / HTTP/1.1[0m" 404 -
+127.0.0.1 - - [09/Feb/2026 11:36:09] "[33mGET / HTTP/1.1[0m" 404 -
+127.0.0.1 - - [09/Feb/2026 11:36:12] "[33mGET / HTTP/1.1[0m" 404 -
+127.0.0.1 - - [09/Feb/2026 11:36:20] "[33mGET / HTTP/1.1[0m" 404 -
+127.0.0.1 - - [09/Feb/2026 11:36:27] "[33mGET / HTTP/1.1[0m" 404 -
+127.0.0.1 - - [09/Feb/2026 11:36:27] "[33mGET /apple-touch-icon-precomposed.png HTTP/1.1[0m" 404 -
+127.0.0.1 - - [09/Feb/2026 11:36:28] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+127.0.0.1 - - [09/Feb/2026 11:36:28] "[33mGET /apple-touch-icon.png HTTP/1.1[0m" 404 -
+127.0.0.1 - - [09/Feb/2026 11:36:28] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+127.0.0.1 - - [09/Feb/2026 11:37:29] "[33mGET / HTTP/1.1[0m" 404 -
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://10.52.141.206:8000
+[33mPress CTRL+C to quit[0m
+127.0.0.1 - - [09/Feb/2026 12:19:21] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [09/Feb/2026 12:19:21] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [09/Feb/2026 12:19:22] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [09/Feb/2026 12:19:22] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
