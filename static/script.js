@@ -40,15 +40,29 @@ async function analyzeResp() {
     aqi: Number(d("aqi").value)
   };
 
-  const res = await fetch("https://ml-project-hdpr.onrender.com/analyze", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  });
+  try {
+    const res = await fetch("https://ml-project-hdpr.onrender.com/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
 
-  const json = await res.json();
-  document.getElementById("respResult").innerText =
-    JSON.stringify(json, null, 2);
+    if (!res.ok) {
+      throw new Error("Server error");
+    }
+
+    const result = await res.json();
+    console.log(result);
+
+    document.getElementById("respResult").innerText =
+      result.possible_diseases
+        .map(d => `• ${d.name} : ${d.probability}%`)
+        .join("\n");
+
+  } catch (err) {
+    console.error(err);
+    alert("ระบบขัดข้อง กรุณาลองใหม่");
+  }
 }
 
 async function analyzeHeat() {

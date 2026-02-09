@@ -37,44 +37,67 @@ def home():
 
 @app.route("/analyze", methods=["POST"])
 def analyze_resp():
-    d = request.get_json(force=True, silent=True)
+    try:
+        d = request.get_json(force=True)
 
-    if d is None:
-        return jsonify({"error": "Invalid JSON"}), 400
+        features = np.array([[
+            d.get("cough", 0),
+            d.get("heavycough", 0),
+            d.get("tired", 0),
+            d.get("feverlittle", 0),
+            d.get("feverbig", 0),
+            d.get("sore_throat", 0),
+            d.get("chestpain", 0),
+            d.get("chest", 0),
+            d.get("tightchest", 0),
+            d.get("breath", 0),
+            d.get("breathtired", 0),
+            d.get("breathfast", 0),
+            d.get("wheezing", 0),
+            d.get("runny_nose", 0),
+            d.get("sneeze", 0),
+            d.get("bodyaches", 0),
+            d.get("weight", 0),
+            d.get("panting", 0),
+            d.get("swallow", 0),
+            d.get("phlegm", 0),
+            d.get("headache", 0),
+            d.get("chronic_cough", 0),
+            1 if d.get("aqi", 0) > 100 else 0,
+            d.get("sad", 0),
+            d.get("nausea", 0),
+            d.get("diarrhea", 0),
+            d.get("loss_smell", 0),
+            d.get("red_eyes", 0),
+            d.get("skin_rash", 0),
+            d.get("finger_color", 0),
+            d.get("hoarseness", 0),
+            d.get("barking_cough", 0),
+            d.get("bloody_nose", 0),
+            d.get("jaw_swelling", 0),
+            d.get("earache", 0),
+            d.get("stridor", 0),
+        ]])
 
-    features = np.array([[ 
-    d.get(k,0) for k in [
-        "cough","chronic_cough","heavycough","tired",
-        "feverlittle","feverbig","sore_throat",
-        "chestpain","chest","tightchest",
-        "breath","breathtired","breathfast","wheezing",
-        "runny_nose","sneeze","bodyaches","weight",
-        "panting","swallow","phlegm","headache",
-        "sad","nausea","diarrhea","loss_smell",
-        "red_eyes","skin_rash","finger_color",
+        proba = resp_model.predict_proba(features)[0]
 
-        # 👉 เพิ่มตรงนี้จริง ๆ
-        "hoarseness","barking_cough","bloody_nose",
-        "jaw_swelling","earache","stridor"
-    ]
-]])
+        res = sorted(
+            [
+                {
+                    "name": RESP_MAP[int(i)],
+                    "probability": round(float(p) * 100, 2)
+                }
+                for i, p in zip(resp_model.classes_, proba)
+            ],
+            key=lambda x: x["probability"],
+            reverse=True
+        )
 
-    proba = resp_model.predict_proba(features)[0]
+        return jsonify({"possible_diseases": res[:3]})
 
-    res = sorted(
-    [
-        {
-            "name": RESP_MAP[int(i)],
-            "probability": round(float(p) * 100, 2)  # %
-        }
-        for i, p in zip(resp_model.classes_, proba)
-    ],
-    key=lambda x: x["probability"],
-    reverse=True
-)
-
-
-    return jsonify({"possible_diseases": res[:3]})
+    except Exception as e:
+        print("ANALYZE ERROR >>>", e)
+        return jsonify({"error": str(e)}), 500
 
 @app.route("/analyze_heat", methods=["POST"])
 def analyze_heat():
