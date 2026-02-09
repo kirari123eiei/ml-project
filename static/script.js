@@ -40,7 +40,7 @@ async function analyzeResp() {
     aqi: Number(d("aqi").value)
   };
 
-  const res = await fetch("http://127.0.0.1:8000/analyze", {
+  const res = await fetch("https://ml-project-hdpr.onrender.com/analyze", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
@@ -72,7 +72,7 @@ async function analyzeHeat() {
     temperature: Number(d("temperature").value)
   };
 
-  const res = await fetch("http://127.0.0.1:8000/analyze_heat", {
+  const res = await fetch("https://ml-project-hdpr.onrender.com/analyze_heat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
